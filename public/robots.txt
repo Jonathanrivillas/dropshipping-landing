@@ -1,0 +1,13 @@
+# robots.txt — Sojo Trendy
+
+# Permitir acceso a todos los bots
+User-agent: *
+Allow: /
+
+# Rutas privadas (checkout y confirmación)
+Disallow: /checkout
+Disallow: /confirmacion-pedido
+
+# Sitemap
+# IMPORTANTE: Actualizar URL en producción
+Sitemap: http://localhost:5174/sitemap.xml

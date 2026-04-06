@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  description    String
+  price          Float
+  compareAtPrice Float?   @map("compare_at_price")
+  images         Json     // string[]
+  category       String
+  tags           Json     // string[]
+  variants       Json     // { type: string, options: string[] }[]
+  stock          Int
+  featured       Boolean  @default(false)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  orderItems OrderItem[]
+
+  @@index([category])
+  @@index([featured])
+  @@index([createdAt])
+  @@map("products")
+}
+
+model Order {
+  id            String    @id @default(cuid())
+  orderNumber   String    @unique @map("order_number")
+  customer      Json
+  paymentMethod String    @map("payment_method")
+  total         Float
+  status        String    @default("PENDING")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  orderItems    OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Float // Price at the time of purchase
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String  @map("order_id")
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  @@map("order_items")
+}

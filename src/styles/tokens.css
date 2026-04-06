@@ -1,0 +1,134 @@
+/* ============================================================
+   DESIGN TOKENS — Sojo Trendy
+   Paleta optimizada para conversión (CRO) y UX de ecommerce.
+   ─────────────────────────────────────────────────────────────
+   Tailwind v4: @theme genera las clases utilitarias.
+   Ejemplo: --color-primary → bg-primary / text-primary / etc.
+   Los modificadores de opacidad funcionan: bg-primary/10 ✓
+   ─────────────────────────────────────────────────────────────
+   Color principal: Indigo-500 (#6366f1)
+   Psicología: Confianza + Modernidad + Alta conversión CTA
+   ============================================================ */
+
+@theme {
+  /* ── FONDOS ─────────────────────────────────────────────── */
+  --color-background:  #ffffff;    /* Fondo general — el producto es el héroe */
+  --color-card:        #ffffff;    /* Tarjetas, modales, drawers */
+  --color-muted:       #f1f5f9;    /* Slate-100 — inputs, hovers suaves */
+  --color-navbar:      #e0e7ff;    /* Indigo-100 — suave, amigable, distinto al blanco de la página */
+
+  /* ── TEXTO ───────────────────────────────────────────────── */
+  --color-foreground:         #0f172a;  /* Slate-950 — máxima legibilidad WCAG AAA */
+  --color-muted-foreground:   #64748b;  /* Slate-500 — descripciones, precios tachados */
+
+  /* ── ACCIÓN PRINCIPAL (CTA) ──────────────────────────────── */
+  /* Indigo-500: botones de compra, foco, links destacados.     */
+  /* Contraste sobre blanco: 4.6:1 — cumple WCAG AA ✓          */
+  --color-primary:            #6366f1;  /* Indigo-500 */
+  --color-primary-hover:      #4f46e5;  /* Indigo-600 */
+  --color-primary-active:     #4338ca;  /* Indigo-700 */
+  --color-primary-foreground: #ffffff;  /* Texto sobre botón primario */
+  --color-primary-subtle:     #eef2ff;  /* Indigo-50 — fondos ghost/badge */
+
+  /* ── BORDES ─────────────────────────────────────────────── */
+  --color-border: #e2e8f0;    /* Slate-200 — separadores y bordes de card */
+  --color-ring:   #6366f1;    /* Foco de teclado = primary (accesibilidad) */
+
+  /* ── FEEDBACK ────────────────────────────────────────────── */
+  --color-success:     #22c55e;  /* Green-500 — "En stock", confirmación pago */
+  --color-destructive: #ef4444;  /* Red-500 — errores, badge "Oferta", urgencia */
+  --color-warning:     #f59e0b;  /* Amber-400 — alertas informativas */
+}
+
+/* ============================================================
+   DARK MODE — se activa con <html class="dark">
+   Solo sobreescribimos los tokens que cambian de valor.
+   El texto y la marca se ajustan para máximo contraste.
+   ============================================================ */
+
+.dark {
+  /* Fondos — jerarquía de profundidad */
+  --color-background: #0f172a;   /* Slate-950 — fondo base */
+  --color-card:       #1e293b;   /* Slate-800 — tarjetas sobre el fondo */
+  --color-muted:      #1e293b;   /* Slate-800 — áreas secundarias */
+  --color-navbar:     #312e81;   /* Indigo-900 — índigo profundo, cálido, distinto al fondo gris frío */
+
+  /* Texto */
+  --color-foreground:       #f8fafc;  /* Slate-50 — casi blanco, sin fatiga visual */
+  --color-muted-foreground: #94a3b8;  /* Slate-400 — texto secundario en dark */
+
+  /* Marca — Indigo más luminoso para contrastar en dark */
+  --color-primary:            #818cf8;  /* Indigo-400 */
+  --color-primary-hover:      #6366f1;  /* Indigo-500 */
+  --color-primary-active:     #4f46e5;  /* Indigo-600 */
+  --color-primary-foreground: #ffffff;
+  --color-primary-subtle:     #1e1b4b;  /* Indigo-950 — fondo ghost/badge en dark */
+
+  /* Bordes */
+  --color-border: #334155;   /* Slate-700 */
+  --color-ring:   #818cf8;   /* Indigo-400 */
+
+  /* Feedback — versiones más luminosas para dark */
+  --color-success:     #4ade80;  /* Green-400 */
+  --color-destructive: #f87171;  /* Red-400 */
+  --color-warning:     #fbbf24;  /* Amber-400 */
+}
+
+/* ============================================================
+   KEYFRAMES — base de todas las animaciones de la app
+   ============================================================ */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+/* Flotación suave — para elementos decorativos del Hero */
+@keyframes float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-8px);  }
+}
+
+/* Glow pulsante — para el botón del carrito con ítems */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(99,102,241,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(99,102,241,0);   }
+}
+
+/* Shimmer — efecto de brillo que recorre los skeletons */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+
+/* Slide desde derecha — para notificaciones y drawers */
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+/* Tokens de animación — generan las clases animate-* en Tailwind v4 */
+@theme {
+  --animate-fade-up:    fade-up    0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in:    fade-in    0.35s ease-out both;
+  --animate-scale-in:   scale-in   0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-slide-down: slide-down 0.3s  ease-out both;
+  --animate-float:      float      3s    ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s    ease-in-out infinite;
+  --animate-slide-left: slide-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

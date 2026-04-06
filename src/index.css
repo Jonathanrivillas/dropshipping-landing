@@ -1,0 +1,316 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+/* Tailwind v4: usar clase .dark en lugar de prefers-color-scheme */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling para toda la app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset de focus visible para teclado — accesibilidad */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Input reutilizable para el panel de administración */
+.input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #1e293b;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.input-field:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Selección de texto con color brand */
+::selection {
+  background-color: #6366f1;
+  color: #ffffff;
+}
+
+/* Scrollbar personalizado — sutil y con acento de marca */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ANIMACIONES DE SCROLL PROFESIONALES
+   Activadas por IntersectionObserver via useScrollAnimation hook
+   ══════════════════════════════════════════════════════════════ */
+
+/* Estado inicial (elemento no visible) */
+.scroll-animate {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ─── FADE UP con SPRING (rebote sutil) ─────────────────────── */
+@keyframes scroll-fade-up-spring {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.scroll-animate-fade-up {
+  animation: scroll-fade-up-spring 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── SLIDE IN desde IZQUIERDA ─────────────────────────────── */
+@keyframes scroll-slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-animate-slide-left {
+  animation: scroll-slide-in-left 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── SLIDE IN desde DERECHA ───────────────────────────────── */
+@keyframes scroll-slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-animate-slide-right {
+  animation: scroll-slide-in-right 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── SCALE IN con BOUNCE ──────────────────────────────────── */
+@keyframes scroll-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.05) rotate(1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.scroll-animate-scale {
+  animation: scroll-scale-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── FADE IN simple (sin movimiento) ──────────────────────── */
+@keyframes scroll-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.scroll-animate-fade {
+  animation: scroll-fade-in 0.6s ease-out forwards;
+}
+
+/* ─── ZOOM IN profesional ──────────────────────────────────── */
+@keyframes scroll-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.scroll-animate-zoom {
+  animation: scroll-zoom-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── BLUR FADE (efecto de enfoque) ────────────────────────── */
+@keyframes scroll-blur-fade {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+.scroll-animate-blur {
+  animation: scroll-blur-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── ROTATE IN (entrada con rotación) ─────────────────────── */
+@keyframes scroll-rotate-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.scroll-animate-rotate {
+  animation: scroll-rotate-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── UTILITIES para STAGGER (delays escalonados) ──────────── */
+.scroll-stagger-1 { animation-delay: 0.1s !important; }
+.scroll-stagger-2 { animation-delay: 0.2s !important; }
+.scroll-stagger-3 { animation-delay: 0.3s !important; }
+.scroll-stagger-4 { animation-delay: 0.4s !important; }
+.scroll-stagger-5 { animation-delay: 0.5s !important; }
+.scroll-stagger-6 { animation-delay: 0.6s !important; }
+
+/* ─── PARALLAX helper (aplicar transform en scroll) ─────────── */
+.parallax-slow {
+  transform: translateY(calc(var(--scroll-progress, 0) * -50px));
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-fast {
+  transform: translateY(calc(var(--scroll-progress, 0) * -100px));
+  transition: transform 0.1s ease-out;
+}
+
+/* ─── HOVER enhancements para elementos animados ────────────── */
+.scroll-animate:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-out;
+}
+
+/* Reducir movimiento para usuarios con preferencias de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-animate,
+  .scroll-animate-fade-up,
+  .scroll-animate-slide-left,
+  .scroll-animate-slide-right,
+  .scroll-animate-scale,
+  .scroll-animate-fade,
+  .scroll-animate-zoom,
+  .scroll-animate-blur,
+  .scroll-animate-rotate {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MICRO-INTERACCIONES PROFESIONALES
+   ══════════════════════════════════════════════════════════════ */
+
+/* Efecto de "press" en botones */
+button:active,
+.btn:active {
+  transform: scale(0.97);
+  transition: transform 0.05s ease-out;
+}
+
+/* Efecto de "levitación" en cards al hover */
+.hover-lift:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Efecto de brillo al hover (para CTAs importantes) */
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-effect {
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Pulso suave para indicadores de atención */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Efecto de "glow" para elementos destacados */
+.glow-on-hover:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  transition: box-shadow 0.3s ease-out;
+}
+
+/* Animación de "bounce" para scroll indicator */
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
