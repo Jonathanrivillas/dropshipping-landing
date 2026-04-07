@@ -1,8 +1,11 @@
+[phases.setup]
+nixPkgs = ['nodejs_22']
+
 [phases.install]
-cmds = ['npm install']
+cmds = ['npm install --prefix /app']
 
 [phases.build]
-cmds = ['npx prisma generate && tsc']
+cmds = ['npm run build']
 
 [start]
-cmd = 'npx prisma migrate deploy && node dist/server.js'
+cmd = 'npm start'
