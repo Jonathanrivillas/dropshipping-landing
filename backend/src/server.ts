@@ -15,7 +15,23 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+].filter(Boolean) as string[]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir requests sin origin (Postman, mobile, etc.)
+    if (!origin) return callback(null, true)
+    if (allowedOrigins.some(o => origin === o) || origin.endsWith('.vercel.app')) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // Rate limiting para el endpoint de pagos (evitar abuso de la API de MercadoPago)
