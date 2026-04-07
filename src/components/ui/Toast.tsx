@@ -1,22 +1,22 @@
-// ============================================================
-// TOAST — Notificación temporal de confirmación
+ï»¿// ============================================================
+// TOAST â€” NotificaciÃ³n temporal de confirmaciÃ³n
 // ============================================================
 // Aparece en la esquina inferior derecha y desaparece sola.
 // Usa createPortal para estar por encima de todo el contenido.
 //
 // ARQUITECTURA DE DOS NIVELES (cumple reglas estrictas del linter):
 //
-//   Toast (outer) — lee el contexto. Renderiza ToastContent
-//   ¦   con key={toastKey}. toastKey es un contador que sube
-//   ¦   en CartContext cada vez que addItem() es llamado.
-//   ¦   Cuando la key cambia ? React desmonta el viejo
-//   ¦   ToastContent y monta uno nuevo con ESTADO FRESCO.
-//   ¦   No necesita setState ni refs en el render.
-//   ¦
-//   +-- ToastContent (inner) — auto-contenido, sin props complejas.
+//   Toast (outer) â€” lee el contexto. Renderiza ToastContent
+//   Â¦   con key={toastKey}. toastKey es un contador que sube
+//   Â¦   en CartContext cada vez que addItem() es llamado.
+//   Â¦   Cuando la key cambia ? React desmonta el viejo
+//   Â¦   ToastContent y monta uno nuevo con ESTADO FRESCO.
+//   Â¦   No necesita setState ni refs en el render.
+//   Â¦
+//   +-- ToastContent (inner) â€” auto-contenido, sin props complejas.
 //       Su useEffect tiene deps [] (solo corre en montaje).
 //       El setState del timer vive DENTRO del callback del
-//       setTimeout — no es síncrono en el body del efecto
+//       setTimeout â€” no es sÃ­ncrono en el body del efecto
 //       ? el linter lo permite.
 // ============================================================
 
@@ -37,9 +37,9 @@ function ToastContent({ product, onDismiss }: ToastContentProps) {
 
   // deps [] ? solo corre al montarse el componente.
   // Cuando toastKey (outer) cambia, React desmonta este componente
-  // y monta uno nuevo: isDismissing arranca en false automáticamente.
-  // El setState está DENTRO del callback del setTimeout (no síncrono)
-  // ? el linter no lo marca como violación.
+  // y monta uno nuevo: isDismissing arranca en false automÃ¡ticamente.
+  // El setState estÃ¡ DENTRO del callback del setTimeout (no sÃ­ncrono)
+  // ? el linter no lo marca como violaciÃ³n.
   useEffect(() => {
     const timer = setTimeout(() => setIsDismissing(true), 3000);
     return () => clearTimeout(timer);
@@ -73,7 +73,7 @@ function ToastContent({ product, onDismiss }: ToastContentProps) {
       <button
         onClick={() => setIsDismissing(true)}
         className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex-shrink-0"
-        aria-label="Cerrar notificación"
+        aria-label="Cerrar notificaciÃ³n"
       >
         <X size={14} />
       </button>
