@@ -43,9 +43,8 @@ export const createPaymentPreference = async (
         items: order.orderItems.map((item) => ({
           id: item.productId,
           title: item.product.name,
-          quantity: item.quantity,
-          unit_price: item.price,
-          currency_id: 'COP',
+          quantity: Number(item.quantity),
+          unit_price: Number(item.price),
         })),
         payer: {
           name: customer.fullName,
@@ -56,9 +55,8 @@ export const createPaymentPreference = async (
           failure: `${frontendUrl}/pago/resultado`,
           pending: `${frontendUrl}/pago/resultado`,
         },
-        // auto_return redirige automáticamente tras pago aprobado.
-        // Solo funciona con dominios públicos (no localhost).
-        ...(process.env.NODE_ENV === 'production' && { auto_return: 'approved' }),
+        // auto_return solo cuando back_url.success es un dominio público real
+        ...(frontendUrl.startsWith('https://') && { auto_return: 'approved' }),
         external_reference: order.orderNumber,
         statement_descriptor: 'Sojo Trendy',
       },
@@ -66,11 +64,12 @@ export const createPaymentPreference = async (
 
     res.json({ init_point: response.init_point })
   } catch (error) {
-    // Log the full MP API error for debugging
-    if (error && typeof error === 'object' && 'cause' in error) {
-      console.error('[MercadoPago] API error cause:', JSON.stringify((error as any).cause))
-    }
-    console.error('[MercadoPago] Error al crear preferencia:', error)
-    next(error)
+    const cause = error && typeof error === 'object' && 'cause' in error ? (error as any).cause : null
+    console.error('[MercadoPago] Error al crear preferencia:', JSON.stringify(cause || error))
+    // Temporal: exponer error completo para debug
+    res.status(400).json({ 
+      error: 'Error MercadoPago', 
+      detail: cause ?? (error instanceof Error ? error.message : String(error))
+    })
   }
 }
