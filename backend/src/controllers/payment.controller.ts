@@ -50,10 +50,6 @@ export const createPaymentPreference = async (
         payer: {
           name: customer.fullName,
           email: customer.email,
-          phone: { number: customer.phone },
-          address: {
-            street_name: customer.address,
-          },
         },
         back_urls: {
           success: `${frontendUrl}/pago/resultado`,
@@ -70,6 +66,10 @@ export const createPaymentPreference = async (
 
     res.json({ init_point: response.init_point })
   } catch (error) {
+    // Log the full MP API error for debugging
+    if (error && typeof error === 'object' && 'cause' in error) {
+      console.error('[MercadoPago] API error cause:', JSON.stringify((error as any).cause))
+    }
     console.error('[MercadoPago] Error al crear preferencia:', error)
     next(error)
   }
