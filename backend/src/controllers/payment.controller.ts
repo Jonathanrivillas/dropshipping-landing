@@ -2,9 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import { MercadoPagoConfig, Preference } from 'mercadopago'
 import prisma from '../database/prisma'
 
-const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-})
+function getMPClient() {
+  if (!process.env.MP_ACCESS_TOKEN) {
+    throw new Error('MP_ACCESS_TOKEN no configurado')
+  }
+  return new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN })
+}
 
 export const createPaymentPreference = async (
   req: Request,
@@ -34,7 +37,7 @@ export const createPaymentPreference = async (
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
 
-    const preference = new Preference(client)
+    const preference = new Preference(getMPClient())
     const response = await preference.create({
       body: {
         items: order.orderItems.map((item) => ({
