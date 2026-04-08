@@ -62,6 +62,10 @@ app.use('/api/webhooks/mercadopago', webhookRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
+app.get('/', (_req, res) => {
+  res.status(200).json({ status: 'ok', service: 'dropshipping-landing-api' });
+});
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
