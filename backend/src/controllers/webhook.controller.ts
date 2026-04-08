@@ -3,9 +3,11 @@ import { MercadoPagoConfig, Payment } from 'mercadopago'
 import crypto from 'crypto'
 import * as orderService from '../services/order.service'
 
-const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-})
+function getMPClient(): MercadoPagoConfig | null {
+  const token = process.env.MP_ACCESS_TOKEN
+  if (!token) return null
+  return new MercadoPagoConfig({ accessToken: token })
+}
 
 // Mapa de estados de MercadoPago → estados internos de la orden
 const MP_STATUS_MAP: Record<string, string> = {
@@ -79,6 +81,12 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
   }
 
   try {
+    const client = getMPClient()
+    if (!client) {
+      console.warn('[Webhook MP] MP_ACCESS_TOKEN no configurado — notificación ignorada')
+      return
+    }
+
     const paymentApi = new Payment(client)
     const payment = await paymentApi.get({ id: paymentId })
 
